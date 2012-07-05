@@ -22,21 +22,33 @@
 # You should have received a copy of the Lesser GNU General Public License
 # along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
 #
+############################################################
+#
+# Concepts:
+#    Modifiers:
+#        Modifiers are functions that modify other functions
+#
+#    Test:
+#        Tests are functions that check if something is tr
+#        They are always asynchronus, therefore they have provide a
+#        special API (accept special arguments):
+#        string FILENAME, function TRUE_CASE, function FALSE_CASE
+#        
+#    Future Modifiers:
+#        Futures are Proxy-Objects for information that is not computed yet.
+#        Future Modifiers are Modifiers that can operate on information that is not computed yet,
+#        more exact: Asynchronous Tests.
+#        Modifyers for future Tests are marked with FUT_...
+#        
+
 
 fs   = require 'fs'
 path = require 'path'
 util = require 'util'
 
-#
-#
 
 ##############################
-# F Transformer
-#
-# These functions (modifyiers) transform other functions
-#
-# The FUT (future) versions work for nonblocking code like the one used in the testers.
-# 
+# Modifiers
 
 #
 # - Print the first value if it is truuthy
@@ -134,6 +146,9 @@ NONE = (Lf...) -> NOT ANY Lf...
 ###############################
 # TESTER
 
+#
+# Check if the file is a dir
+# 
 isDir = noerr (o, Yf, Nf) ->
     fs.stat noerr (stat) ->
         if stat.isDirectory()
@@ -141,8 +156,14 @@ isDir = noerr (o, Yf, Nf) ->
         else
             do Nf
 
+#
+# Check if the file is a document
+# 
 isFile = FUT_NOT isDir
 
+#
+# Check if the name matches the expression
+# 
 nameMatch = (n, p, Yf, Nf) ->
     if n.match p
         do Yf
