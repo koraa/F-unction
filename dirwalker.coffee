@@ -190,7 +190,7 @@ walk_dir = (dir, preq, f) ->
     fs.readdir NOERR (files) ->
         for o in files
             preq  o, f
-            isDir o, SETARG walk_dir, o, preq, f
+            isDir o, SETARG walk_dir, (path.join dir, o), preq, f
 
 ###############################
 # Export
