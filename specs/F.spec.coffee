@@ -34,54 +34,61 @@ they = (mssg, data, arg...) ->
 #######################################
 # Test
 
-describe "F", "Modifier", ->
-    describe 'NOERR', ->
-        beforeEach ->
-            f = F.NOERR (x, err) -> return x, err
-            val = 23
-            err = 42
-            thrown = null
-            spyOn(util.error).andCall (x) -> thrown = x
+describe "F" ->
+    describe "Modifier", ->
 
-        it 'noerr', ->
-            r = f null, val
-            expect(r).toEqual val
-            expect(util.error).not.toHaveBeenCalled()
+        describe 'NOERR', ->
+            beforeEach ->
+                f = F.NOERR (x, err) -> return x, err
+                val = 23
+                err = 42
+                thrown = null
+                spyOn(util.error).andCall (x) -> thrown = x
 
-        it 'noerr', ->
-            r = f err , val
-            expect(r).toEqual val
-            expect(util.error).toHaveBeenCalled().
-            expect(thrown).toEqual err
+            it 'noerr', ->
+                r = f null, val
+                expect(r).toEqual val
+                expect(util.error).not.toHaveBeenCalled()
 
-    it 'Y', ->
-        f = (x)->x
-        expect(do F.Y f).toEqual f
+            it 'noerr', ->
+                r = f err , val
+                expect(r).toEqual val
+                expect(util.error).toHaveBeenCalled().
+                expect(thrown).toEqual err
 
-    they 'CONST', [null, 0, 1, true, false, "fnord", (->)], (c) ->
-        expect(do F.CONST c).toEqual c
+        it 'Y', ->
+            f = (x)->x
+            expect(do F.Y f).toEqual f
 
-    they 'GEN_F', [null, 0, 1, true, false, "fnord"], (c) ->
-        expect(do F.GEN_F c).toEqual c
-        expect(do F.GEN_F F.CONST c).toEqual c
+        they 'CONST', [null, 0, 1, true, false, "fnord", (->)], (c) ->
+            expect(do F.CONST c).toEqual c
 
-    describe "ARG", ->
-        beforeEach ->
-            f = (a...) -> a
-            argo = [2,4,6,8, "foo"]
-            argmod = [4, 6, 9 12, "bar"]
+        they 'GEN_F', [null, 0, 1, true, false, "fnord"], (c) ->
+            expect(do F.GEN_F c).toEqual c
+            expect(do F.GEN_F F.CONST c).toEqual c
 
-        it 'REF', ->
-            expect(f argo...).toEqual argo
+        describe "ARG", ->
+            beforeEach ->
+                f = (a...) -> a
+                argo = [2,4,6,8, "foo"]
+                argmod = [4, 6, 9 12, "bar"]
 
-        it 'SET', ->
-            expect((F.SETARG f, argmod...) argo...).toEqual argmod
+            it 'REF', ->
+                expect(f argo...).toEqual argo
 
-        it 'APP', ->
-            expect((F.APPARG f, argmod...) argo...).toEqual argo.concat argmod
+            it 'SET', ->
+                expect((F.SETARG f, argmod...) argo...).toEqual argmod
 
-        it 'PREP', ->
-            expect((F.APPARG f, argmod...) argo...).toEqual argmod.concat argo
+            it 'APP', ->
+                expect((F.APPARG f, argmod...) argo...).toEqual argo.concat argmod
 
+            it 'PREP', ->
+                expect((F.APPARG f, argmod...) argo...).toEqual argmod.concat argo
+
+        it 'NOT', ->
+            expect(do NOT F.Ftrue).toEqual  false
+            expect(do NOT F.Ffalse).toEqual true
+            expect((NOT F.Fproxy1) true).toEqual  false
+            expect((NOT F.Fproxy1) false).toEqual true
 
         

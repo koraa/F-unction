@@ -27,17 +27,7 @@
 # Concepts:
 #    Modifiers:
 #        Modifiers are functions that modify other functions
-#        
-#    Future Modifiers:
-#        Futures are Proxy-Objects for information that is not computed yet.
-#        Future Modifiers are Modifiers that can operate on information that is not computed yet,
-#        more exact: Asynchronous/Callback Style/Asynchronous Functions.
-#        Explicit Future-Style Functions defined by adding a FUT proprtty with
-#        the future style function.
-#        Future Style Functions should be used by invokeing F.FUT $function_name,
-#        it also works for functions without future style definitions, in wich case the
-#        the return value will be used to simulate a future-style function.
-#        
+#
 
 util = require 'util'
 
@@ -104,8 +94,6 @@ PREPARG = (f, a1...) ->
 #
 NOT = (f) ->
     (a...) -> ! f a...
-NOT.FUT = (f) ->
-    (a..., Yf=Fnone, Nf=Fnone) -> f a..., Nf, Yf
 
 #
 # Takes a list of functions and returns true if all return values are truuthy
@@ -115,13 +103,6 @@ ALL = (Lf...) ->
     (a...) ->
         return false for f in Lf where not GEN_F f a...
         true
-ALL.FUT = (Lf...) ->
-    (a..., final) ->
-        cnt = 1
-        collect = ->
-            cnt++
-            final if cnt >= Lf.length
-        cond a..., collect for cond in Lf    
 
 #
 # Takes a list of functions and returns true if any return value is truuthy
@@ -135,29 +116,12 @@ ANY = (Lf...) ->
     (a...) ->
         return true for f in Lf where GEN_F f a...
         false
-ANY.FUT = (Lf...) ->
-    (a..., final) ->h
-        cond a..., final for cond in Lf    
 
 #
 # Takes a list of functions and returns true if all return values are falsey
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
 #
 NONE = (Lf...) -> NOT ANY Lf...
-NONE.FUT = (Lf...) -> FUT_NOT FUT_ANY Lf...
-
-#
-# This is a MODIFIER that generates a Asynchronous (callback) API
-# for originally synchronus functions
-# 
-FUT = (f) ->
-    f.FUT if f.FUT?
-
-    (a..., , Yf=Fnull, Nf=Fnull) ->
-        if do f
-            do Yf
-        else
-            do Nf
 
 ###############################
 # Export
