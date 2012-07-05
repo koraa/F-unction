@@ -1,26 +1,26 @@
 #
-# File:   dirwalker.coffee
+# File:   F.coffee
 # Author: Karolin Varner
-# Date:   7/1/2012
+# Date:   7/5/2012
 #
-# This file provides a lib for asynchroniously walking directories.
+# This file provides a lib for better working with functions
 # 
 ##########################################################
 #
-# This file is part of PinkText.
+# This file is part of F/unction.
 #
-# PinkText is free software: you can redistribute it and/or modify
+# F/unction is free software: you can redistribute it and/or modify
 # it under the terms of the Lesser GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# PinkText is distributed in the hope that it will be useful,
+# F/unction is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # Lesser GNU General Public License for more details.
 #
 # You should have received a copy of the Lesser GNU General Public License
-# along with PinkText.  If not, see <http://www.gnu.org/licenses/>.
+# along with F/unction.  If not, see <http://www.gnu.org/licenses/>.
 #
 ############################################################
 #
@@ -41,9 +41,6 @@
 #        Modifyers for future Tests are marked with FUT_...
 #        
 
-
-fs   = require 'fs'
-path = require 'path'
 util = require 'util'
 
 ##############################
@@ -161,38 +158,6 @@ GEN_FUT = (f) ->
             do Nf
 
 ###############################
-# TESTER
-
-#
-# Check if the file is a dir
-# 
-isDir = NOERR (o, Yf=Fnull, Nf=Fnull) ->
-    fs.stat NOERR (stat) ->
-        if stat.isDirectory()
-            do Yf
-        else
-            do Nf
-
-#
-# Check if the file is a document
-# 
-isFile = FUT_NOT isDir
-
-#
-# Check if the name matches the expression
-# 
-nameMatch = GEN_FUT (n, p) -> n.match p
-
-###############################
-# Fun
-
-walk_dir = (dir, preq, f) ->
-    fs.readdir NOERR (files) ->
-        for o in files
-            preq  o, f
-            isDir o, SETARG walk_dir, (path.join dir, o), preq, f
-
-###############################
 # Export
 
 Fnull  = Fnull
@@ -223,13 +188,3 @@ exports.FUT_NONE = FUT_NONE
 exports.NONE = NONE
 
 exports.GEN_FUT = GEN_FUT
-
-
-
-exports.isDir = isDir
-exports.isFile = isFile
-exports.nameMatch = nameMatch
-
-
-
-exports.walk_dir = walk_dir

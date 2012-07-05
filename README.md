@@ -1,4 +1,4 @@
-PinkText
-========
+F-unction
+=========
 
-Pink Text is a CMS thatr uses Git with Text Files at Data storage. Status is Conceptional.
+The F/unction Library provides some Utilities for working with functions in JS
