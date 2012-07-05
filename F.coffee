@@ -44,9 +44,11 @@ util = require 'util'
 ##############################
 # Constants
 
-Fnull  = (->)
-Ftrue  = (-> true)
-Ffalse = (-> false)
+Fnull   = ->
+Ftrue   = -> true
+Ffalse  = -> false
+Fproxy  = (a...) -> a
+Fproxy1 = (x)    -> x
 
 ##############################
 # Modifiers
