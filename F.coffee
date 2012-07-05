@@ -101,7 +101,7 @@ NOT = (f) ->
 #
 ALL = (Lf...) ->
     (a...) ->
-        return false for f in Lf where not GEN_F f a...
+        return false for f in Lf where not (GEN_F f) a...
         true
 
 #
@@ -114,7 +114,7 @@ ALL = (Lf...) ->
 #
 ANY = (Lf...) ->
     (a...) ->
-        return true for f in Lf where GEN_F f a...
+        return true for f in Lf where (GEN_F f) a...
         false
 
 #
