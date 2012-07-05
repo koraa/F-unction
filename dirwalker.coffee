@@ -134,20 +134,20 @@ NONE = (Lf...) -> NOT ANY Lf...
 ###############################
 # TESTER
 
-#
-# All of the thesters are future (asynchronus)
-#
-
-
-isDir = noerr (o, f, Nf) ->
+isDir = noerr (o, Yf, Nf) ->
     fs.stat noerr (stat) ->
-        do f if stat.isDirectory()
+        if stat.isDirectory()
+            do Yf
+        else
+            do Nf
 
-isFile = NOT isDir
+isFile = FUT_NOT isDir
 
-nameMatch = (n, p) -> n.match p
-
-
+nameMatch = (n, p, Yf, Nf) ->
+    if n.match p
+        do Yf
+    else
+        do Nf
 
 ###############################
 # Fun
