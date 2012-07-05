@@ -60,7 +60,7 @@ Ffalse = (-> false)
 # - Print the first value if it is truuthy
 # - Left-shift the arguments by 1 (move the first arg to the end)
 # 
-noerr = (err, f) ->
+NOERR = (err, f) ->
     (err, a...) ->
         util.error err if err
         f a..., err
@@ -166,8 +166,8 @@ GEN_FUT = (f) ->
 #
 # Check if the file is a dir
 # 
-isDir = noerr (o, Yf=Fnull, Nf=Fnull) ->
-    fs.stat noerr (stat) ->
+isDir = NOERR (o, Yf=Fnull, Nf=Fnull) ->
+    fs.stat NOERR (stat) ->
         if stat.isDirectory()
             do Yf
         else
@@ -187,8 +187,7 @@ nameMatch = GEN_FUT (n, p) -> n.match p
 # Fun
 
 walk_dir = (dir, preq, f) ->
-    fs.readdir noerr (files) ->
-        util.error err if err
+    fs.readdir NOERR (files) ->
         for o in files
             preq  o, f
             isDir o, SETARG walk_dir, o, preq, f
@@ -196,14 +195,11 @@ walk_dir = (dir, preq, f) ->
 ###############################
 # Export
 
-Fnull  = (->)
-Ftrue  = (-> true)
-Ffalse = (-> false)
+Fnull  = Fnull
+Ftrue  = Ftrue
+Ffalse = Ffalse
 
-##############################
-# Modifiers
-
-exports.noerr = noerr
+exports.NOERR = NOERR
 
 exports.Y  = Y
 
