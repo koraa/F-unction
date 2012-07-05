@@ -32,13 +32,17 @@
 #        Tests are functions that check if something is tr
 #        They are always asynchronus, therefore they have provide a
 #        special API (accept special arguments):
-#        string FILENAME, function TRUE_CASE, function FALSE_CASE
+#        string FILENAME, function callback
 #        
 #    Future Modifiers:
 #        Futures are Proxy-Objects for information that is not computed yet.
 #        Future Modifiers are Modifiers that can operate on information that is not computed yet,
-#        more exact: Asynchronous Tests.
-#        Modifyers for future Tests are marked with FUT_...
+#        more exact: Asynchronous/Callback Style/Asynchronous Functions.
+#        Explicit Future-Style Functions defined by adding a FUT proprtty with
+#        the future style function.
+#        Future Style Functions should be used by invokeing F.FUT $function_name,
+#        it also works for functions without future style definitions, in wich case the
+#        the return value will be used to simulate a future-style function.
 #        
 
 util = require 'util'
@@ -102,26 +106,26 @@ PREPARG = (f, a1...) ->
 #
 # Returns the boolean-inverted value
 #
-FUT_NOT = (f) ->
-    (a..., Yf=Fnone, Nf=Fnone) -> f a..., Nf, Yf
 NOT = (f) ->
     (a...) -> ! f a...
+NOT.FUT = (f) ->
+    (a..., Yf=Fnone, Nf=Fnone) -> f a..., Nf, Yf
 
 #
 # Takes a list of functions and returns true if all return values are truuthy
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
 #
-FUT_ALL = (Lf...) ->
+ALL = (Lf...) ->
+    (a...) ->
+        return false for f in Lf where not GEN_F f a...
+        true
+ALL.FUT = (Lf...) ->
     (a..., final) ->
         cnt = 1
         collect = ->
             cnt++
             final if cnt >= Lf.length
         cond a..., collect for cond in Lf    
-ALL = (Lf...) ->
-    (a...) ->
-        return false for f in Lf where not GEN_F f a...
-        true
 
 #
 # Takes a list of functions and returns true if any return value is truuthy
@@ -131,26 +135,28 @@ ALL = (Lf...) ->
 # Takes a list of functions and returns true if all return values are truuthy
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
 #
-FUT_ANY = (Lf...) ->
-    (a..., final) ->h
-        cond a..., final for cond in Lf    
 ANY = (Lf...) ->
     (a...) ->
         return true for f in Lf where GEN_F f a...
         false
+ANY.FUT = (Lf...) ->
+    (a..., final) ->h
+        cond a..., final for cond in Lf    
 
 #
 # Takes a list of functions and returns true if all return values are falsey
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
 #
-FUT_NONE = (Lf...) -> FUT_NOT FUT_ANY Lf...
 NONE = (Lf...) -> NOT ANY Lf...
+NONE.FUT = (Lf...) -> FUT_NOT FUT_ANY Lf...
 
 #
 # This is a MODIFIER that generates a Asynchronous (callback) API
 # for originally synchronus functions
 # 
-GEN_FUT = (f) ->
+FUT = (f) ->
+    f.FUT if f.FUT?
+
     (a..., , Yf=Fnull, Nf=Fnull) ->
         if do f
             do Yf
@@ -175,16 +181,12 @@ module.exports.SETARG  = SETARG
 module.exports.APPARG  = APPARG
 module.exports.PREPARG = PREPARG
 
-module.exports.FUT_NOT = FUT_NOT
 module.exports.NOT = NOT
 
-module.exports.FUT_ALL = FUT_ALL 
 module.exports.ALL = ALL
 
-module.exports.FUT_ANY = FUT_ANY 
 module.exports.ANY = ANY
 
-module.exports.FUT_NONE = FUT_NONE
 module.exports.NONE = NONE
 
 module.exports.GEN_FUT = GEN_FUT
