@@ -27,6 +27,9 @@ fs   = require 'fs'
 path = require 'path'
 util = require 'util'
 
+#
+#
+
 ##############################
 # F Transformer
 #
@@ -62,6 +65,12 @@ CONST = (x) -> (->x)
 GEN_F = (x) ->
     f if x instanceof Function
     CONST x
+
+#
+# - Reset the arguments of a Function
+#
+SETARG = (f, a...) ->
+    (-> f a...)
 
 #
 # Always appends the given arguments to the end of the arg list
@@ -148,7 +157,7 @@ walk_dir = (dir, preq, f) ->
         util.error err if err
         for o in files
             preq  o, f
-            isDir o, (-> walk_dir o, preq, f)
+            isDir o, SETARG walk_dir, o, preq, f
 
 ###############################
 # Export
