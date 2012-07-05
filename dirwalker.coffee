@@ -149,6 +149,17 @@ ANY = (Lf...) ->
 FUT_NONE = (Lf...) -> FUT_NOT FUT_ANY Lf...
 NONE = (Lf...) -> NOT ANY Lf...
 
+#
+# This is a MODIFIER that generates a Asynchronous (callback) API
+# for originally synchronus functions
+# 
+GEN_FUT = (f) ->
+    (a..., , Yf=Fnull, Nf=Fnull) ->
+        if do f
+            do Yf
+        else
+            do Nf
+
 ###############################
 # TESTER
 
@@ -170,11 +181,7 @@ isFile = FUT_NOT isDir
 #
 # Check if the name matches the expression
 # 
-nameMatch = (n, p, Yf=Fnull, Nf=Fnull) ->
-    if n.match p
-        do Yf
-    else
-        do Nf
+nameMatch = GEN_FUT (n, p) -> n.match p
 
 ###############################
 # Fun
