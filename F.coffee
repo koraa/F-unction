@@ -34,7 +34,7 @@ util = require 'util'
 ##############################
 # Constants
 
-Fnull   = ->
+Fnull   = -> null
 Ftrue   = -> true
 Ffalse  = -> false
 Fproxy  = (a...) -> a
