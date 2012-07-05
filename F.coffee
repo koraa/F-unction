@@ -27,12 +27,6 @@
 # Concepts:
 #    Modifiers:
 #        Modifiers are functions that modify other functions
-#
-#    Test:
-#        Tests are functions that check if something is tr
-#        They are always asynchronus, therefore they have provide a
-#        special API (accept special arguments):
-#        string FILENAME, function callback
 #        
 #    Future Modifiers:
 #        Futures are Proxy-Objects for information that is not computed yet.
