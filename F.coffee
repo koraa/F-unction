@@ -160,31 +160,31 @@ GEN_FUT = (f) ->
 ###############################
 # Export
 
-Fnull  = Fnull
-Ftrue  = Ftrue
-Ffalse = Ffalse
+module.exports.Fnull  = Fnull
+module.exports.Ftrue  = Ftrue
+module.exports.Ffalse = Ffalse
 
-exports.NOERR = NOERR
+module.exports.NOERR = NOERR
 
-exports.Y  = Y
+module.exports.Y  = Y
 
-exports.CONST = CONST
-exports.GEN_F = GEN_F
+module.exports.CONST = CONST
+module.exports.GEN_F = GEN_F
 
-exports.SETARG  = SETARG
-exports.APPARG  = APPARG
-exports.PREPARG = PREPARG
+module.exports.SETARG  = SETARG
+module.exports.APPARG  = APPARG
+module.exports.PREPARG = PREPARG
 
-exports.FUT_NOT = FUT_NOT
-exports.NOT = NOT
+module.exports.FUT_NOT = FUT_NOT
+module.exports.NOT = NOT
 
-exports.FUT_ALL = FUT_ALL 
-exports.ALL = ALL
+module.exports.FUT_ALL = FUT_ALL 
+module.exports.ALL = ALL
 
-exports.FUT_ANY = FUT_ANY 
-exports.ANY = ANY
+module.exports.FUT_ANY = FUT_ANY 
+module.exports.ANY = ANY
 
-exports.FUT_NONE = FUT_NONE
-exports.NONE = NONE
+module.exports.FUT_NONE = FUT_NONE
+module.exports.NONE = NONE
 
-exports.GEN_FUT = GEN_FUT
+module.exports.GEN_FUT = GEN_FUT
