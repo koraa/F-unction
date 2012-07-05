@@ -195,3 +195,45 @@ walk_dir = (dir, preq, f) ->
 
 ###############################
 # Export
+
+Fnull  = (->)
+Ftrue  = (-> true)
+Ffalse = (-> false)
+
+##############################
+# Modifiers
+
+exports.noerr = noerr
+
+exports.Y  = Y
+
+exports.CONST = CONST
+exports.GEN_F = GEN_F
+
+exports.SETARG  = SETARG
+exports.APPARG  = APPARG
+exports.PREPARG = PREPARG
+
+exports.FUT_NOT = FUT_NOT
+exports.NOT = NOT
+
+exports.FUT_ALL = FUT_ALL 
+exports.ALL = ALL
+
+exports.FUT_ANY = FUT_ANY 
+exports.ANY = ANY
+
+exports.FUT_NONE = FUT_NONE
+exports.NONE = NONE
+
+exports.GEN_FUT = GEN_FUT
+
+
+
+exports.isDir = isDir
+exports.isFile = isFile
+exports.nameMatch = nameMatch
+
+
+
+exports.walk_dir = walk_dir
