@@ -86,9 +86,49 @@ describe "F" ->
                 expect((F.APPARG f, argmod...) argo...).toEqual argmod.concat argo
 
         it 'NOT', ->
-            expect(do NOT F.Ftrue).toEqual  false
-            expect(do NOT F.Ffalse).toEqual true
-            expect((NOT F.Fproxy1) true).toEqual  false
-            expect((NOT F.Fproxy1) false).toEqual true
+            expect(do F.NOT F.Ftrue).toEqual  false
+            expect(do F.NOT F.Ffalse).toEqual true
+            expect(do F.NOT F.Fproxy1, true).toEqual  false
+            expect(do F.NOT F.Fproxy1, false).toEqual true
 
+        it 'ALL', ->
+           expect(do F.ALL).toEqual true
         
+           expect(do F.ALL true).toEqual true
+           expect(do F.ALL F.Ftrue).toEqual true
+
+           expect(do F.ALL false).toEqual false
+           expect(do F.ALL F.Ffalse).toEqual false
+
+           expect(do F.ALL true, F.Ftrue).toEqual true
+           expect(do F.ALL true, F.Ftrue, false).toEqual false
+
+        it 'ANY', ->
+           expect(do F.ANY).toEqual true
+        
+           expect(do F.ANY true).toEqual true
+           expect(do F.ANY F.Ftrue).toEqual true
+
+           expect(do F.ANY false).toEqual false
+           expect(do F.ANY F.Ffalse).toEqual false
+
+           expect(do F.ANY true, F.Ftrue).toEqual true
+           expect(do F.ANY true, F.Ftrue, false).toEqual true
+
+           expect(do F.ANY false, F.Ffalse).toEqual false
+           expect(do F.ANY F.true, F.Ffalse, false).toEqual true
+
+        it 'NONE', ->
+           expect(do F.ANY).toEqual false
+        
+           expect(do F.ANY true).toEqual false
+           expect(do F.ANY F.Ftrue).toEqual false
+
+           expect(do F.ANY false).toEqual true
+           expect(do F.ANY F.Ffalse).toEqual true
+
+           expect(do F.ANY true, F.Ftrue).toEqual false
+           expect(do F.ANY true, F.Ftrue, false).toEqual false
+
+           expect(do F.ANY false, F.Ffalse).toEqual true
+           expect(do F.ANY F.true, F.Ffalse, false).toEqual false
