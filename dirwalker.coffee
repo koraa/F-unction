@@ -46,6 +46,12 @@ fs   = require 'fs'
 path = require 'path'
 util = require 'util'
 
+##############################
+# Constants
+
+Fnull  = (->)
+Ftrue  = (-> true)
+Ffalse = (-> false)
 
 ##############################
 # Modifiers
@@ -100,7 +106,7 @@ PREPARG = (f, a1...) ->
 # Returns the boolean-inverted value
 #
 FUT_NOT = (f) ->
-    (a..., Yf, Nf) -> f a..., Nf, Yf
+    (a..., Yf=Fnone, Nf=Fnone) -> f a..., Nf, Yf
 NOT = (f) ->
     (a...) -> ! f a...
 
@@ -149,7 +155,7 @@ NONE = (Lf...) -> NOT ANY Lf...
 #
 # Check if the file is a dir
 # 
-isDir = noerr (o, Yf, Nf) ->
+isDir = noerr (o, Yf=Fnull, Nf=Fnull) ->
     fs.stat noerr (stat) ->
         if stat.isDirectory()
             do Yf
@@ -164,7 +170,7 @@ isFile = FUT_NOT isDir
 #
 # Check if the name matches the expression
 # 
-nameMatch = (n, p, Yf, Nf) ->
+nameMatch = (n, p, Yf=Fnull, Nf=Fnull) ->
     if n.match p
         do Yf
     else
