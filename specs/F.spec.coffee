@@ -1,7 +1,7 @@
-fs   = require 'fs'
+0fs   = require 'fs'
 util = require 'util'
 
-dw = reqire '../dirwalker'
+F = reqire '../dirwalker'
 
 #######################################
 # Util
@@ -37,7 +37,7 @@ they = (mssg, data, arg...) ->
 describe "F", "Modifier", ->
     describe 'NOERR', ->
         beforeEach ->
-            f = dw.NOERR (x, err) -> return x, err
+            f = F.NOERR (x, err) -> return x, err
             val = 23
             err = 42
             thrown = null
@@ -56,14 +56,32 @@ describe "F", "Modifier", ->
 
     it 'Y', ->
         f = (x)->x
-        expect(do dw.Y f).toEqual f
+        expect(do F.Y f).toEqual f
 
-    they 'CONST', [null, 0, 1, true, false, "fnord"], (c) ->
-        expect(do dw.CONST c).toEqual c
+    they 'CONST', [null, 0, 1, true, false, "fnord", (->)], (c) ->
+        expect(do F.CONST c).toEqual c
+
+    they 'GEN_F', [null, 0, 1, true, false, "fnord"], (c) ->
+        expect(do F.GEN_F c).toEqual c
+        expect(do F.GEN_F F.CONST c).toEqual c
 
     describe "ARG", ->
         beforeEach ->
             f = (a...) -> a
             argo = [2,4,6,8, "foo"]
             argmod = [4, 6, 9 12, "bar"]
-            
+
+        it 'REF', ->
+            expect(f argo...).toEqual argo
+
+        it 'SET', ->
+            expect((F.SETARG f, argmod...) argo...).toEqual argmod
+
+        it 'APP', ->
+            expect((F.APPARG f, argmod...) argo...).toEqual argo.concat argmod
+
+        it 'PREP', ->
+            expect((F.APPARG f, argmod...) argo...).toEqual argmod.concat argo
+
+
+        
