@@ -44,13 +44,13 @@ Fproxy1 = (x)    -> x
 # Modifiers
 
 #
-# - Print the first value if it is truuthy
-# - Left-shift the arguments by 1 (move the first arg to the end)
+# - Print the first argument if it is truuthy
+# - Pop first argument from the arg list
 # 
 NOERR = (f) ->
     (err, a...) ->
         util.error err if err
-        f a..., err
+        f a...
 
 #
 # - Modyfy the arguments, so that the first argument always the function itself
