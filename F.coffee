@@ -166,6 +166,7 @@ module.exports.GEN_F = GEN_F
 
 module.exports.SETARG  = SETARG
 module.exports.APPARG  = APPARG
+module.exports.ARG     = APPARG
 module.exports.PREPARG = PREPARG
 
 module.exports.NOT = NOT
