@@ -125,3 +125,10 @@ describe "F", ->
 
            expect(do F.NONE false, F.Ffalse).toEqual true
            expect(do F.NONE F.Ftrue, F.Ffalse, false).toEqual false
+
+        it 'PIPE', ->
+            r = F.dor 2,
+                F.PIPE ((x) -> x*x),
+                       ((x) -> x+3),
+                       ((x) -> x*4)
+            expect(r).toEqual 28

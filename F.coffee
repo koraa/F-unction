@@ -126,6 +126,27 @@ ANY = (Lf...) ->
 #
 NONE = (Lf...) -> NOT ANY Lf...
 
+#
+# Processing pipline:
+# Takes a list of functions ans sequentially invokes the function with the
+# result from the last fun
+# The first pipe element might be not a function,
+# in which case it will just be used as input for the next function
+#
+PIPE = (Fl...) ->
+    (a...) ->
+        Fl[1..].reduce ((o, f) -> f o),
+                       Fl[0] a... # First one is a special case: invoke with all args
+
+###############################
+# Util
+
+#
+# Just like the do keyword,
+# but treates the last arg as the function, not the first.
+# 
+dor = (a..., f) -> f a...
+
 ###############################
 # Export
 
@@ -154,3 +175,9 @@ module.exports.ALL = ALL
 module.exports.ANY = ANY
 
 module.exports.NONE = NONE
+
+module.exports.PIPE = PIPE
+
+
+
+module.exports.dor = dor
