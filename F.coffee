@@ -47,7 +47,7 @@ Fproxy1 = (x)    -> x
 # - Print the first value if it is truuthy
 # - Left-shift the arguments by 1 (move the first arg to the end)
 # 
-NOERR = (err, f) ->
+NOERR = (f) ->
     (err, a...) ->
         util.error err if err
         f a..., err
@@ -61,14 +61,15 @@ Y = (f) ->
 #
 # Generates a Function that allways returns the given value
 # 
-CONST = (x) -> (->x)
+CONST = (x) ->
+    (->x)
 
 #
 # IF x is a function returns x
 # otherwise creates a constant function from x
 # 
 GEN_F = (x) ->
-    f if x instanceof Function
+    return x if x instanceof Function
     CONST x
 
 #
@@ -101,7 +102,7 @@ NOT = (f) ->
 #
 ALL = (Lf...) ->
     (a...) ->
-        return false for f in Lf where not (GEN_F f) a...
+        return false for f in Lf when not (GEN_F f) a...
         true
 
 #
@@ -111,24 +112,29 @@ ALL = (Lf...) ->
 #
 # Takes a list of functions and returns true if all return values are truuthy
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
+# It Returns false for an empty list
 #
 ANY = (Lf...) ->
     (a...) ->
-        return true for f in Lf where (GEN_F f) a...
+        return true for f in Lf when (GEN_F f) a...
         false
 
 #
 # Takes a list of functions and returns true if all return values are falsey
 # Non-functions are treated as constant functions (there boolen value is used instad of ther return value)
+# It returns true for an empty list
 #
 NONE = (Lf...) -> NOT ANY Lf...
 
 ###############################
 # Export
 
-module.exports.Fnull  = Fnull
-module.exports.Ftrue  = Ftrue
-module.exports.Ffalse = Ffalse
+module.exports.Fnull   = Fnull
+module.exports.Ftrue   = Ftrue
+module.exports.Ffalse  = Ffalse
+module.exports.Fproxy  = Fproxy
+module.exports.Fproxy1 = Fproxy1
+
 
 module.exports.NOERR = NOERR
 
@@ -148,5 +154,3 @@ module.exports.ALL = ALL
 module.exports.ANY = ANY
 
 module.exports.NONE = NONE
-
-module.exports.GEN_FUT = GEN_FUT

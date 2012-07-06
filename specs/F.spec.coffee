@@ -1,21 +1,10 @@
-0fs   = require 'fs'
+fs   = require 'fs'
 util = require 'util'
 
-F = reqire '../dirwalker'
+F = require '../F'
 
 #######################################
 # Util
-
-#
-# Add support for cascaded describes
-# 
-_describe = describe
-describe = (p..., f) ->
-    if p.length < 2
-        _describe p[0], f
-    else
-        _describe p[0], (-> describe p[1..], f)
-
 #
 # Test for multiple datasets
 # 
@@ -34,27 +23,30 @@ they = (mssg, data, arg...) ->
 #######################################
 # Test
 
-describe "F" ->
+describe "F", ->
     describe "Modifier", ->
 
         describe 'NOERR', ->
+            _ = {}
             beforeEach ->
-                f = F.NOERR (x, err) -> return x, err
-                val = 23
-                err = 42
-                thrown = null
-                spyOn(util.error).andCall (x) -> thrown = x
+                _.f = F.NOERR (x, err) -> x
+                _.val = 23
+                _.err = 32
+                _.thrown = null
+                
+                spyOn(util, 'error').andCallFake (x) ->
+                    _.thrown = x
 
-            it 'noerr', ->
-                r = f null, val
-                expect(r).toEqual val
+            it 'Y noerr', ->
+                r = _.f null, _.val
+                expect(r         ).toEqual _.val
                 expect(util.error).not.toHaveBeenCalled()
 
-            it 'noerr', ->
-                r = f err , val
-                expect(r).toEqual val
-                expect(util.error).toHaveBeenCalled().
-                expect(thrown).toEqual err
+            it 'ERR noerr', ->
+                r = _.f _.err , _.val
+                expect(r          ).toEqual _.val
+                expect(util.error ).toHaveBeenCalled()
+                expect(_.thrown).toEqual _.err
 
         it 'Y', ->
             f = (x)->x
@@ -68,31 +60,32 @@ describe "F" ->
             expect(do F.GEN_F F.CONST c).toEqual c
 
         describe "ARG", ->
+            _ = {}
             beforeEach ->
-                f = (a...) -> a
-                argo = [2,4,6,8, "foo"]
-                argmod = [4, 6, 9 12, "bar"]
+                _.f = (a...) -> a
+                _.argo = [2,4,6,8, "foo"]
+                _.argmod = [4, 6, 9, 12, "bar"]
 
             it 'REF', ->
-                expect(f argo...).toEqual argo
+                expect(_.f _.argo...).toEqual _.argo
 
             it 'SET', ->
-                expect((F.SETARG f, argmod...) argo...).toEqual argmod
+                expect((F.SETARG _.f, _.argmod...) _.argo...).toEqual _.argmod
 
             it 'APP', ->
-                expect((F.APPARG f, argmod...) argo...).toEqual argo.concat argmod
+                expect((F.APPARG _.f, _.argmod...) _.argo...).toEqual _.argo.concat _.argmod
 
             it 'PREP', ->
-                expect((F.APPARG f, argmod...) argo...).toEqual argmod.concat argo
+                expect((F.PREPARG _.f, _.argmod...) _.argo...).toEqual _.argmod.concat _.argo
 
         it 'NOT', ->
             expect(do F.NOT F.Ftrue).toEqual  false
             expect(do F.NOT F.Ffalse).toEqual true
-            expect(do F.NOT F.Fproxy1, true).toEqual  false
-            expect(do F.NOT F.Fproxy1, false).toEqual true
+            expect((F.NOT F.Fproxy1) true).toEqual  false
+            expect((F.NOT F.Fproxy1) false).toEqual true
 
         it 'ALL', ->
-           expect(do F.ALL).toEqual true
+           expect(do F.ALL()).toEqual true
         
            expect(do F.ALL true).toEqual true
            expect(do F.ALL F.Ftrue).toEqual true
@@ -104,7 +97,7 @@ describe "F" ->
            expect(do F.ALL true, F.Ftrue, false).toEqual false
 
         it 'ANY', ->
-           expect(do F.ANY).toEqual true
+           expect(do F.ANY()).toEqual false
         
            expect(do F.ANY true).toEqual true
            expect(do F.ANY F.Ftrue).toEqual true
@@ -116,19 +109,19 @@ describe "F" ->
            expect(do F.ANY true, F.Ftrue, false).toEqual true
 
            expect(do F.ANY false, F.Ffalse).toEqual false
-           expect(do F.ANY F.true, F.Ffalse, false).toEqual true
+           expect(do F.ANY F.Ftrue, F.Ffalse, false).toEqual true
 
         it 'NONE', ->
-           expect(do F.ANY).toEqual false
+           expect(do F.NONE()).toEqual true
         
-           expect(do F.ANY true).toEqual false
-           expect(do F.ANY F.Ftrue).toEqual false
+           expect(do F.NONE true).toEqual false
+           expect(do F.NONE F.Ftrue).toEqual false
 
-           expect(do F.ANY false).toEqual true
-           expect(do F.ANY F.Ffalse).toEqual true
+           expect(do F.NONE false).toEqual true
+           expect(do F.NONE F.Ffalse).toEqual true
 
-           expect(do F.ANY true, F.Ftrue).toEqual false
-           expect(do F.ANY true, F.Ftrue, false).toEqual false
+           expect(do F.NONE true, F.Ftrue).toEqual false
+           expect(do F.NONE true, F.Ftrue, false).toEqual false
 
-           expect(do F.ANY false, F.Ffalse).toEqual true
-           expect(do F.ANY F.true, F.Ffalse, false).toEqual false
+           expect(do F.NONE false, F.Ffalse).toEqual true
+           expect(do F.NONE F.Ftrue, F.Ffalse, false).toEqual false
