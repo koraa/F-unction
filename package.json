@@ -1,0 +1,33 @@
+{
+  "name": "F",
+  "description": "Function Utilities",
+  "keywords": [
+    "function",
+    "coffeescript"
+  ],
+  "author": {
+    "name": "Karolin Varner"
+  },
+  "version": "0.0.1",
+  "licenses": [
+    {
+      "type": "LGPL",
+      "url": "https://www.gnu.org/licenses/lgpl.txt"
+    }
+  ],
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "main": "./F.coffee",
+  "homepage": "https://github.com/mappleconfusers/PinkText/",
+  "bugs": {
+    "name": "https://github.com/mappleconfusers/PinkText//issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mappleconfusers/PinkText.git"
+  },
+  "dependencies": {
+    "coffee-script": ">=1.0.1"
+  }
+}
