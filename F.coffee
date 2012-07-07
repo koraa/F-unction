@@ -147,6 +147,11 @@ PIPE = (Fl...) ->
 # 
 dor = (a..., f) -> f a...
 
+#
+# The do keyword as fun (because the keyword itself has special semantik)
+# 
+do = (f, a...) -> f a...
+
 ###############################
 # Export
 
@@ -180,5 +185,5 @@ module.exports.NONE = NONE
 module.exports.PIPE = PIPE
 
 
-
+module.exports.do = do
 module.exports.dor = dor
