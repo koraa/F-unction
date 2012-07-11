@@ -56,7 +56,7 @@ NOERR = (f) ->
 # - Modyfy the arguments, so that the first argument always the function itself
 # 
 Y = (f) ->
-    (a...) -> f f, a...
+    (a...) -> f (Y f), a...
 
 #
 # Generates a Function that allways returns the given value
